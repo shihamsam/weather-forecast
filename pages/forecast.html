@@ -1,21 +1,17 @@
 
 Weather Forecast for {{city}}
 
+<p>
+<a href="#/"> Back to Search</a>
+    
+</p>
 <hr />
 
-Days :  <a href="#/forecast/2" >2</a> |  <a href="#/forecast/5" >5</a> |  <a href="#/forecast/7" >7</a> | 
+Days :  <a href="#/forecast/2" ng-class="{'bg-primary' : days === '2' }" >2</a> |  <a href="#/forecast/5" ng-class="{'bg-primary' : days === '5' }" >5</a> |  <a  href="#/forecast/7" ng-class="{'bg-primary' : days === '7' }" >7</a> | 
 <div ng-repeat="w in weatherResult.list">
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ convertToDate(w.dt) | date :  'MMM d, yyyy' }}</h3>
-                </div>
-                <div class="panel-body">
-                    Daytime Temperature: {{w.temp.day}} Celcius
-                </div>
-            </div>
-        
+            <weather-component weather-day="w" convert-to-date="convertToDate(mydate)" date-format="MMMM d, yyyy"></weather-component>
         </div>
     </div>
 </div>

@@ -8,6 +8,21 @@ weatherApp.service('cityService',function(){
     
 });
 
+weatherApp.directive('weatherComponent',function(){
+    
+    return {
+        scope:{
+            weatherDay: '=',
+            convertToDate: '&',
+            dateFormat: '@'
+        },
+        templateUrl:'weather-component.html',
+        replace:true
+        
+    };
+    
+});
+
 weatherApp.controller('homeController',['$scope','cityService',function($scope,cityService){
     
     $scope.city = cityService.city;
@@ -23,7 +38,7 @@ weatherApp.controller('forecastController',['$scope','$routeParams', '$resource'
     
     $scope.weatherAPI = $resource("http://api.openweathermap.org/data/2.5/forecast/daily?APPID=d14393814dda4b847414e440512198a0&units=metric",{callback: "JSON_CALLBACK"}, { get:{method:"JSONP"}});
    
-    $scope.days = $routeParams.days || 3;
+    $scope.days = $routeParams.days || '2';
                                             
     $scope.weatherResult = $scope.weatherAPI.get({q:$scope.city,cnt:$scope.days});
     
