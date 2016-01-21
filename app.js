@@ -17,14 +17,22 @@ weatherApp.controller('homeController',['$scope','cityService',function($scope,c
     } );
     
 }]);
-weatherApp.controller('forecastController',['$scope', '$resource','cityService',function($scope,$resource,cityService){
+weatherApp.controller('forecastController',['$scope','$routeParams', '$resource','cityService',function($scope,$routeParams,$resource,cityService){
     $scope.city = cityService.city; 
-    $scope.weatherAPI = $resource("http://api.openweathermap.org/data/2.5/forecast?APPID=d14393814dda4b847414e440512198a0",{callback: "JSON_CALLBACK"}, { get:{method:"JSONP"}});
+    
+    
+    $scope.weatherAPI = $resource("http://api.openweathermap.org/data/2.5/forecast/daily?APPID=d14393814dda4b847414e440512198a0&units=metric",{callback: "JSON_CALLBACK"}, { get:{method:"JSONP"}});
    
-    $scope.weatherResult = $scope.weatherAPI.get({q:$scope.city,cnt:2});
+    $scope.days = $routeParams.days || 3;
+                                            
+    $scope.weatherResult = $scope.weatherAPI.get({q:$scope.city,cnt:$scope.days});
     
     $scope.convertToDate= function(dt){
-        return Date(dt);
+        
+        var utcSeconds = dt;
+        var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        d.setUTCSeconds(utcSeconds);
+        return d;
     }
     
 }]);
@@ -37,6 +45,12 @@ weatherApp.config(function($routeProvider){
         
         })    
         .when('/forecast',{
+        
+            templateUrl:'pages/forecast.html',
+            controller:'forecastController'
+        
+        })
+        .when('/forecast/:days',{
         
             templateUrl:'pages/forecast.html',
             controller:'forecastController'
